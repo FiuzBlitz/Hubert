@@ -1,166 +1,199 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="pl" data-theme="light">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dziewczyny — Tierlista</title>
-
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background: #f5f5f5;
-        margin: 0;
-        padding: 10px;
-        display: flex;
-        justify-content: center;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plusy i Minusy</title>
+  <style>
+    :root {
+      --bg: #f4f4f4;
+      --card: #ffffff;
+      --text: #111;
+      --plus: #1faa00;
+      --minus: #d32f2f;
+    }
+    [data-theme="dark"] {
+      --bg: #121212;
+      --card: #1e1e1e;
+      --text: #eaeaea;
+      --plus: #66ff66;
+      --minus: #ff6666;
     }
 
-    .page {
-        width: 1080px;
-        max-width: 100%;
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.4s, color 0.4s;
     }
 
     h1 {
-        text-align: center;
-        font-size: 32px;
-        margin-bottom: 15px;
+      text-align: center;
+      margin-top: 20px;
+      font-size: 28px;
+      animation: fadeIn 0.6s ease;
     }
 
-    .tiers {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .tier {
-        background: white;
-        padding: 12px;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        min-height: 70px;
-        transition: 0.3s;
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 20px;
     }
 
-    .tier h2 {
-        margin: 0 0 10px 0;
-        font-size: 20px;
-        padding: 8px;
-        border-radius: 6px;
-        text-align: center;
-        color: white;
+    .section {
+      background: var(--card);
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      animation: fadeIn 0.5s ease;
     }
 
-    .item {
-        background: #fff;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 12px;
-        font-size: 18px;
-        margin: 6px 0;
-        text-align: center;
-        font-weight: bold;
-        cursor: grab;
-        touch-action: none;
+    .title {
+      font-size: 20px;
+      margin-bottom: 10px;
+      font-weight: bold;
     }
 
-    .dragging {
-        opacity: 0.5;
-        transform: scale(1.05);
+    .plus { color: var(--plus); }
+    .minus { color: var(--minus); }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0;
+      border-radius: 8px;
+      border: 1px solid #aaa;
+      background: var(--card);
+      color: var(--text);
     }
 
-    @media (max-width: 600px) {
-        .item {
-            font-size: 16px;
-            padding: 10px;
-        }
-        h1 { font-size: 26px; }
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #333;
+      color: #fff;
+      font-size: 16px;
+      margin-top: 10px;
+      transition: 0.3s;
     }
-</style>
+
+    button:hover {
+      background: #555;
+    }
+
+    .toggle {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background: #333;
+      padding: 10px 14px;
+      border-radius: 20px;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    .toggle:hover { background: #555; }
+
+    ul { list-style: none; padding: 0; }
+    li { margin: 6px 0; }
+
+    .result {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      animation: fadeIn 0.6s ease;
+    }
+  </style>
 </head>
-
 <body>
-<div class="page">
-<h1>Dziewczyny</h1>
+  <div class="toggle" onclick="toggleTheme()">Tryb: Light/Dark</div>
 
-<div class="tiers" id="tiersContainer"></div>
-</div>
+  <h1>Plusy i Minusy</h1>
+  <div class="container">
 
-<script>
-// LISTA IMION
-const names = [
-    "Natasza","Marysia","Wanda","Martyna","Michalina","Weronika",
-    "Wiktoria","Blanka","Nikola","Julia","Marti","Maja","Łucja",
-    "Lizka","Polina","Kasia","Tosia","Pola","Amelia",
-    "Wiktoria (Lepszy makijaż)","Helena","Helena (Lepszy makijaż)"
-];
+    <div class="section">
+      <div class="title plus">+ Plusy</div>
+      <input id="plusText" type="text" placeholder="Wpisz plus..." />
+      <select id="plusWeight">
+        <option value="1">Waga 1</option>
+        <option value="2">Waga 2</option>
+        <option value="3">Waga 3</option>
+        <option value="4">Waga 4</option>
+        <option value="5">Waga 5</option>
+      </select>
+      <button onclick="addPlus()">Dodaj plus</button>
+      <ul id="plusList"></ul>
+    </div>
 
-// KOLORY OD ZIELONEGO (10) DO CZERWONEGO (1)
-function tierColor(level) {
-    const green = {r:50,g:200,b:90};
-    const red = {r:230,g:60,b:60};
-    const t = (level-1)/9;
-    const r = Math.round(green.r*(1-t) + red.r*t);
-    const g = Math.round(green.g*(1-t) + red.g*t);
-    const b = Math.round(green.b*(1-t) + red.b*t);
-    return `rgb(${r},${g},${b})`;
-}
+    <div class="section">
+      <div class="title minus">- Minusy</div>
+      <input id="minusText" type="text" placeholder="Wpisz minus..." />
+      <select id="minusWeight">
+        <option value="1">Waga 1</option>
+        <option value="2">Waga 2</option>
+        <option value="3">Waga 3</option>
+        <option value="4">Waga 4</option>
+        <option value="5">Waga 5</option>
+      </select>
+      <button onclick="addMinus()">Dodaj minus</button>
+      <ul id="minusList"></ul>
+    </div>
 
-// TWORZENIE TIERÓW
-const container = document.getElementById("tiersContainer");
+    <button onclick="calculate()">Oblicz wynik</button>
+    <div id="result" class="result"></div>
+  </div>
 
-for (let level = 10; level >= 1; level--) {
-    const tier = document.createElement("div");
-    tier.className = "tier";
-    tier.dataset.tier = level;
+  <script>
+    const plusData = [];
+    const minusData = [];
 
-    const title = document.createElement("h2");
-    title.textContent = level;
-    title.style.background = tierColor(level);
-
-    tier.appendChild(title);
-
-    container.appendChild(tier);
-}
-
-// DODAWANIE IMION DO TIERU 10
-const tier10 = document.querySelector('[data-tier="10"]');
-
-names.forEach(name => {
-    const item = document.createElement("div");
-    item.className = "item";
-    item.textContent = name;
-    tier10.appendChild(item);
-});
-
-// ------- DOTYK (MOBILE DRAG&DROP) -------
-
-let current = null;
-
-document.addEventListener("touchstart", e => {
-    const t = e.target.closest(".item");
-    if (!t) return;
-
-    current = t;
-    t.classList.add("dragging");
-}, { passive: false });
-
-document.addEventListener("touchmove", e => {
-    if (!current) return;
-
-    const touch = e.touches[0];
-    const element = document.elementFromPoint(touch.clientX, touch.clientY);
-    const tier = element?.closest(".tier");
-
-    if (tier) {
-        tier.appendChild(current);
+    function addPlus() {
+      const text = document.getElementById('plusText').value;
+      const weight = Number(document.getElementById('plusWeight').value);
+      if (!text) return;
+      plusData.push(weight);
+      document.getElementById('plusList').innerHTML += `<li class='plus'>+ ${text} (waga: ${weight})</li>`;
+      document.getElementById('plusText').value = '';
     }
-}, { passive: false });
 
-document.addEventListener("touchend", () => {
-    if (current) current.classList.remove("dragging");
-    current = null;
-});
-</script>
+    function addMinus() {
+      const text = document.getElementById('minusText').value;
+      const weight = Number(document.getElementById('minusWeight').value);
+      if (!text) return;
+      minusData.push(weight);
+      document.getElementById('minusList').innerHTML += `<li class='minus'>- ${text} (waga: ${weight})</li>`;
+      document.getElementById('minusText').value = '';
+    }
 
+    function calculate() {
+      const plusAvg = plusData.length ? plusData.reduce((a,b)=>a+b,0) / plusData.length : 0;
+      const minusAvg = minusData.length ? minusData.reduce((a,b)=>a+b,0) / minusData.length : 0;
+
+      let verdict = '';
+      if (plusAvg > minusAvg) verdict = 'Plusy przeważają! ✔️';
+      else if (minusAvg > plusAvg) verdict = 'Minusy przeważają! ❌';
+      else verdict = 'Remis.';
+
+      document.getElementById('result').innerHTML = `Średnia plusów: ${plusAvg.toFixed(2)}<br>Średnia minusów: ${minusAvg.toFixed(2)}<br><br>${verdict}`;
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      html.dataset.theme = html.dataset.theme === "light" ? "dark" : "light";
+    }
+  </script>
 </body>
 </html>
