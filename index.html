@@ -92,9 +92,9 @@
     }
 
     .toggle {
-      position: fixed;
-      top: 15px;
-      right: 15px;
+      position: absolute;
+      top: 10px;
+      left: 10px;
       background: #333;
       padding: 10px 14px;
       border-radius: 20px;
@@ -121,7 +121,11 @@
 <body>
   <div class="toggle" onclick="toggleTheme()">Tryb: Light/Dark</div>
 
-  <h1>Plusy i Minusy</h1>
+  <div class="header">
+    <h1 id="mainTitleDisplay">Plusy i Minusy</h1>
+    <input id="mainTitle" type="text" placeholder="Wpisz tytuł porównania..." oninput="updateTitle()" />
+    <div class="toggle" onclick="toggleTheme()">Tryb: Light/Dark</div>
+</div>
   <div class="container">
 
     <div class="section">
@@ -188,6 +192,11 @@
       else verdict = 'Remis.';
 
       document.getElementById('result').innerHTML = `Średnia plusów: ${plusAvg.toFixed(2)}<br>Średnia minusów: ${minusAvg.toFixed(2)}<br><br>${verdict}`;
+    }
+
+    function updateTitle() {
+      const title = document.getElementById('mainTitle').value;
+      document.getElementById('mainTitleDisplay').textContent = title || 'Plusy i Minusy';
     }
 
     function toggleTheme() {
