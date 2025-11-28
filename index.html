@@ -5,207 +5,129 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Plusy i Minusy</title>
   <style>
-    :root {
-      --bg: #f4f4f4;
-      --card: #ffffff;
-      --text: #111;
-      --plus: #1faa00;
-      --minus: #d32f2f;
-    }
-    [data-theme="dark"] {
-      --bg: #121212;
-      --card: #1e1e1e;
-      --text: #eaeaea;
-      --plus: #66ff66;
-      --minus: #ff6666;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: var(--bg);
-      color: var(--text);
-      transition: background 0.4s, color 0.4s;
-    }
-
-    h1 {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 28px;
-      animation: fadeIn 0.6s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .container {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      padding: 20px;
-    }
-
-    .section {
-      background: var(--card);
-      padding: 15px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      animation: fadeIn 0.5s ease;
-    }
-
-    .title {
-      font-size: 20px;
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
-
-    .plus { color: var(--plus); }
-    .minus { color: var(--minus); }
-
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin: 6px 0;
-      border-radius: 8px;
-      border: 1px solid #aaa;
-      background: var(--card);
-      color: var(--text);
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      background: #333;
-      color: #fff;
-      font-size: 16px;
-      margin-top: 10px;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      background: #555;
-    }
-
-    .toggle {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: #333;
-      padding: 10px 14px;
-      border-radius: 20px;
-      color: white;
-      cursor: pointer;
-      font-size: 14px;
-      transition: 0.3s;
-    }
-
-    .toggle:hover { background: #555; }
-
-    ul { list-style: none; padding: 0; }
-    li { margin: 6px 0; }
-
-    .result {
-      margin-top: 20px;
-      text-align: center;
-      font-size: 20px;
-      font-weight: bold;
-      animation: fadeIn 0.6s ease;
-    }
+    :root { --bg:#f4f4f4; --card:#fff; --text:#111; --plus:#1faa00; --minus:#d32f2f; }
+    [data-theme="dark"] { --bg:#121212; --card:#1e1e1e; --text:#eee; --plus:#66ff66; --minus:#ff6666; }
+    body{font-family:Arial;margin:0;background:var(--bg);color:var(--text);transition:.3s}
+    .header{padding:20px;text-align:center;position:relative}
+    #mainTitle{width:80%;padding:10px;border-radius:8px;border:1px solid #aaa;background:var(--card);color:var(--text)}
+    .toggle{position:absolute;top:10px;left:10px;padding:10px;border-radius:30px;background:#333;color:white;cursor:pointer}
+    .container{padding:20px;display:flex;flex-direction:column;gap:20px}
+    .section{background:var(--card);padding:15px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.1)}
+    .plus{color:var(--plus)} .minus{color:var(--minus)}
+    input,select{width:100%;padding:10px;border-radius:8px;border:1px solid #aaa;background:var(--card);color:var(--text)}
+    button{padding:12px;border:none;border-radius:8px;background:#333;color:white;margin-top:10px}
+    ul{padding:0;list-style:none}
+    li{display:flex;justify-content:space-between;align-items:center}
+    .del{cursor:pointer;margin-left:10px}
   </style>
 </head>
 <body>
-  <div <!-- removed extra toggle -->gleTheme()"><span id="themeIcon">🌙</span></div>
 
-  <div class="header">
-    <h1 id="mainTitleDisplay">Plusy i Minusy</h1>
-    <input id="mainTitle" type="text" placeholder="Wpisz tytuł porównania..." oninput="updateTitle()" />
-    <div <!-- removed extra toggle --></div>
+<div class="header">
+  <div class="toggle" onclick="toggleTheme()"><span id="themeIcon">🌙</span></div>
+  <h1 id="mainTitleDisplay">Plusy i Minusy</h1>
+  <input id="mainTitle" placeholder="Wpisz tytuł..." oninput="updateTitle()" />
 </div>
-  <div class="container">
 
-    <div class="section">
-      <div class="title plus">+ Plusy</div>
-      <input id="plusText" type="text" placeholder="Wpisz plus..." />
-      <select id="plusWeight">
-        <option value="1">Waga 1</option>
-        <option value="2">Waga 2</option>
-        <option value="3">Waga 3</option>
-        <option value="4">Waga 4</option>
-        <option value="5">Waga 5</option>
-      </select>
-      <button onclick="addPlus()">Dodaj plus</button>
-      <ul id="plusList"></ul>
-    </div>
-
-    <div class="section">
-      <div class="title minus">- Minusy</div>
-      <input id="minusText" type="text" placeholder="Wpisz minus..." />
-      <select id="minusWeight">
-        <option value="1">Waga 1</option>
-        <option value="2">Waga 2</option>
-        <option value="3">Waga 3</option>
-        <option value="4">Waga 4</option>
-        <option value="5">Waga 5</option>
-      </select>
-      <button onclick="addMinus()">Dodaj minus</button>
-      <ul id="minusList"></ul>
-    </div>
-
-    <button onclick="calculate()">Oblicz wynik</button>
-    <div id="result" class="result"></div>
+<div class="container">
+  <div class="section">
+    <h2 class="plus">+ Plusy</h2>
+    <input id="plusText" placeholder="Wpisz plus..." />
+    <select id="plusWeight"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
+    <button onclick="addPlus()">Dodaj plus</button>
+    <ul id="plusList"></ul>
   </div>
 
-  <script>
-    const plusData = [];
-    const minusData = [];
+  <div class="section">
+    <h2 class="minus">- Minusy</h2>
+    <input id="minusText" placeholder="Wpisz minus..." />
+    <select id="minusWeight"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
+    <button onclick="addMinus()">Dodaj minus</button>
+    <ul id="minusList"></ul>
+  </div>
 
-    function addPlus() {
-      const text = document.getElementById('plusText').value;
-      const weight = Number(document.getElementById('plusWeight').value);
-      if (!text) return;
-      plusData.push(weight);
-      document.getElementById('plusList').innerHTML += `<li class='plus'>+ ${text} (waga: ${weight})</li>`;
-      document.getElementById('plusText').value = '';
-    }
+  <button onclick="calculate()">Oblicz wynik</button>
+  <button onclick="saveData()">Zapisz</button>
+  <button onclick="loadData()">Wczytaj</button>
+  <div id="result"></div>
+</div>
 
-    function addMinus() {
-      const text = document.getElementById('minusText').value;
-      const weight = Number(document.getElementById('minusWeight').value);
-      if (!text) return;
-      minusData.push(weight);
-      document.getElementById('minusList').innerHTML += `<li class='minus'>- ${text} (waga: ${weight})</li>`;
-      document.getElementById('minusText').value = '';
-    }
+<script>
+let plusData=[], minusData=[];
 
-    function calculate() {
-      const plusAvg = plusData.length ? plusData.reduce((a,b)=>a+b,0) / plusData.length : 0;
-      const minusAvg = minusData.length ? minusData.reduce((a,b)=>a+b,0) / minusData.length : 0;
+function updateTitle(){
+  const t=document.getElementById('mainTitle').value;
+  document.getElementById('mainTitleDisplay').textContent=t||'Plusy i Minusy';
+}
 
-      let verdict = '';
-      if (plusAvg > minusAvg) verdict = 'Plusy przeważają! ✔️';
-      else if (minusAvg > plusAvg) verdict = 'Minusy przeważają! ❌';
-      else verdict = 'Remis.';
+function toggleTheme(){
+  const html=document.documentElement;
+  const icon=document.getElementById('themeIcon');
+  const newTheme=html.dataset.theme==='light'?'dark':'light';
+  html.dataset.theme=newTheme;
+  icon.textContent=newTheme==='light'?'🌙':'☀️';
+}
 
-      document.getElementById('result').innerHTML = `Średnia plusów: ${plusAvg.toFixed(2)}<br>Średnia minusów: ${minusAvg.toFixed(2)}<br><br>${verdict}`;
-    }
+function render(){
+  const plusList=document.getElementById('plusList');
+  const minusList=document.getElementById('minusList');
+  plusList.innerHTML=''; minusList.innerHTML='';
+  plusData.forEach((item,i)=>{
+    plusList.innerHTML+=`<li class='plus'>+ ${item.text} (waga: ${item.weight}) <span class='del' onclick='deletePlus(${i})'>❌</span></li>`;
+  });
+  minusData.forEach((item,i)=>{
+    minusList.innerHTML+=`<li class='minus'>- ${item.text} (waga: ${item.weight}) <span class='del' onclick='deleteMinus(${i})'>❌</span></li>`;
+  });
+}
 
-    function updateTitle() {
-      const title = document.getElementById('mainTitle').value;
-      document.getElementById('mainTitleDisplay').textContent = title || 'Plusy i Minusy';
-    }
+function addPlus(){
+  const text=plusText.value.trim();
+  const w=Number(plusWeight.value);
+  if(!text)return;
+  plusData.push({text,weight:w});
+  plusText.value='';
+  render();
+}
+function addMinus(){
+  const text=minusText.value.trim();
+  const w=Number(minusWeight.value);
+  if(!text)return;
+  minusData.push({text,weight:w});
+  minusText.value='';
+  render();
+}
+function deletePlus(i){ plusData.splice(i,1); render(); }
+function deleteMinus(i){ minusData.splice(i,1); render(); }
 
-    function toggleTheme() {
-      const html = document.documentElement;
-      const icon = document.getElementById('themeIcon');
-      const newTheme = html.dataset.theme === "light" ? "dark" : "light";
-      html.dataset.theme = newTheme;
-      icon.textContent = newTheme === "light" ? "🌙" : "☀️";
-    }
-  </script>
+function calculate(){
+  let p=plusData.map(x=>x.weight), m=minusData.map(x=>x.weight);
+  let pa=p.length?p.reduce((a,b)=>a+b)/p.length:0;
+  let ma=m.length?m.reduce((a,b)=>a+b)/m.length:0;
+  let verdict=pa>ma?'Plusy przeważają!':ma>pa?'Minusy przeważają!':'Remis';
+  result.innerHTML=`Średnia plusów: ${pa.toFixed(2)}<br>Średnia minusów: ${ma.toFixed(2)}<br><b>${verdict}</b>`;
+}
+
+function saveData(){
+  const data={
+    title:mainTitle.value,
+    plus:plusData,
+    minus:minusData
+  };
+  localStorage.setItem('pmData',JSON.stringify(data));
+  alert('Zapisano!');
+}
+
+function loadData(){
+  const data=JSON.parse(localStorage.getItem('pmData')||'null');
+  if(!data){alert('Brak zapisu');return;}
+  mainTitle.value=data.title;
+  updateTitle();
+  plusData=data.plus;
+  minusData=data.minus;
+  render();
+  alert('Wczytano!');
+}
+</script>
+
 </body>
 </html>
